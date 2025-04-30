@@ -1,79 +1,38 @@
-const express = require("express");
+const express = require('express');
+require('dotenv').config;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json())
 
-app.get("/users", (req, res) => {
-  const { userName, email, password, dateOfBirth } = req.body;
-  try {
-    if (!userName || email) {
-      return res.send({
-        message: "Both user name and email is required",
-      });
-    } else {
-      res.send({
-        message: "user created successfully",
-        name: userName,
-        email: email,
-      });
+app.get('/',(req,res) => {
+    res.send("<h1>Hello! Welcome to my Assignment!</h1>")
+})
+
+app.post('/signup',(req,res) => {
+    const {username, email, password, dob} = req.body;
+    try{
+        if(!username || !email || !password){
+            res.status(400).json({ error: "Enter All the required fields!"});
+        } else if(username.length <= 0){
+            res.status(400).json({ error: "Username cannot be empty" })
+        } else if(email.length <= 0){
+            res.status(400).json({ error: "Email cannot be empty" })
+        } else if(password.length < 8 || password.length >= 16){
+            res.status(400).json({ error: "Password length should be greater than 8 or less than or equal to 16" })
+        }
+        res.status(201).json({
+            "message":"User created successfully!",
+        });
+    } catch(err){
+        res.status(400).json({ error: err.message });
     }
-  } catch (err) {
-    res.send({
-      message: "Server error",
-    });
-  }
+})
 
-  if(length(password < 8 || length(password >= 16))) {
-    return res.send({
-        message: "Password length should be greater than 8 or less than or equal to 16"
-    })
-  }
-});
-
-const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    console.log(`Server running on the PORT:${PORT}`)
+})
 
 
 
